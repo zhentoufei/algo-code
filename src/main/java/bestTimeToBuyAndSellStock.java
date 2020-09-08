@@ -2,7 +2,7 @@
  * 121. 买卖股票的最佳时机
  * https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/
  * */
-public class maxProfit {
+public class bestTimeToBuyAndSellStock {
     public static int maxProfitFun(int[] prices){
         if(null==prices || prices.length == 0 || prices.length == 1){
             return 0;
