@@ -2,47 +2,43 @@ import java.util.List;
 
 public class bestTimeToBuyAndSellStockIII {
 
-    public static int maxProfitFun(int[] prices){
+
+    public static int maxProfitFun(int[] prices) {
         int maxProfit = 0;
 
-        if(null == prices || prices.length == 0 || prices.length == 1){
+        if (null == prices || prices.length == 0) {
             return maxProfit;
         }
-
-        int length = prices.length;
-
-
-        int valleyIndex;
-        int peakIndex;
-        int smallProfit = 0;
-        int bigProfit = 0;
-        int i = 0;
-        while (i < length - 1){
-
-            while (i < length -1 && prices[i] >= prices[i + 1]){
-                i ++;
-            }
-            valleyIndex = i;
-
-            while (i < length - 1 && prices[i] < prices[i + 1]){
-                i ++;
-            }
-            peakIndex = i;
-
-            int tempProfit = prices[peakIndex] - prices[valleyIndex];
-            if(tempProfit > bigProfit){
-                smallProfit = bigProfit;
-                bigProfit = tempProfit;
-            }else if(tempProfit > smallProfit && tempProfit < bigProfit){
-                smallProfit = tempProfit;
-            }
-        }
-        maxProfit = smallProfit + bigProfit;
+        maxProfit = dfsProfit(prices, 0, 0, 0);
 
         return maxProfit;
     }
 
+    public static int dfsProfit(int[] prices, int index, int status, int buyTime) {
+        // statues 1: 代表购买
+        // buyTime 带包当前购买次数
+        if (index == prices.length || buyTime == 2) {
+            return 0;
+        }
+
+        int keepIncome;
+        int buyIncome = 0;
+        int saleIncome = 0;
+
+        keepIncome = dfsProfit(prices, index + 1, status, buyTime);
+
+        if (status == 1) {
+            saleIncome = dfsProfit(prices, index + 1, 0, buyTime + 1) + prices[index];
+        } else {
+            buyIncome = dfsProfit(prices, index + 1, 1, buyTime) - prices[index];
+        }
+
+        return Math.max(keepIncome, Math.max(buyIncome, saleIncome));
+
+    }
+
+
     public static void main(String[] args) {
-        System.out.println(maxProfitFun(new int[]{3,3,5,0,0,3,1,4}));
+        System.out.println(maxProfitFun(new int[]{3, 3, 5, 0, 0, 3, 1, 4}));
     }
 }
